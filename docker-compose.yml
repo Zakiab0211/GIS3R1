@@ -1,0 +1,126 @@
+# version: '3.8'
+
+# services:
+#   # PHP Service
+#   app:
+#     build:
+#       context: .
+#       dockerfile: Dockerfile
+#     image: gis-app
+#     container_name: gis-app
+#     restart: unless-stopped
+#     tty: true
+#     environment:
+#       SERVICE_NAME: app1
+#       SERVICE_TAGS: dev
+#     working_dir: /var/www
+#     volumes:
+#       - .:/var/www  # Pastikan path ini ada di host
+#       - ./docker-compose/php/local.ini:/usr/local/etc/php/conf.d/local.ini  # Pastikan path ini ada
+#     networks:
+#       - gis-network  # Pastikan network ini konsisten
+
+#   # Nginx Service
+#   webserver:
+#     image: nginx:alpine
+#     container_name: nginx-webserver
+#     restart: unless-stopped
+#     tty: true
+#     ports:
+#       - "80:80"  # Pastikan port ini tidak bentrok sesuaikan
+#     volumes:
+#       - .:/var/www  # Pastikan path ini ada di host
+#       - ./docker-compose/nginx:/etc/nginx/conf.d/  # Pastikan path ini ada
+#     networks:
+#       - gis-network  # Pastikan network ini konsisten
+
+#   # MySQL Service
+#   db:
+#     image: mysql:5.7
+#     container_name: mysql
+#     restart: unless-stopped
+#     environment:
+#       MYSQL_DATABASE: gis
+#       MYSQL_USER: rootnow
+#       MYSQL_PASSWORD: rootnow
+#       MYSQL_ROOT_PASSWORD: rootnow
+#     ports:
+#       - "3307:3306"  # Gunakan port yang berbeda dari 3306
+#     volumes:
+#       - dbdata:/var/lib/mysql
+#     networks:
+#       - gis-network  # Pastikan network ini konsisten
+
+# # Docker Networks
+# networks:
+#   gis-network:
+#     driver: bridge
+
+# # Docker Volumes
+# volumes:
+#   dbdata:
+#     driver: local
+
+
+
+version: '3.8'
+
+services:
+  # PHP Laravel Service
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: webgis-app-3R1
+    container_name: webgis-app-3R1
+    restart: unless-stopped
+    tty: true
+    environment:
+      SERVICE_NAME: app
+      SERVICE_TAGS: dev
+    working_dir: /var/www
+    volumes:
+      - .:/var/www  # Pastikan path ini ada di host
+      - ./docker-compose/php/local.ini:/usr/local/etc/php/conf.d/local.ini  # Konfigurasi PHP
+    networks:
+      - gis-network
+
+  # Nginx Service
+  webserver:
+    image: nginx:alpine
+    container_name: gis-nginx
+    restart: unless-stopped
+    tty: true
+    ports:
+      - "80:80"
+    volumes:
+      - .:/var/www
+      - ./docker-compose/nginx/nginx.conf:/etc/nginx/conf.d/default.conf  # Pastikan file ini ada
+    depends_on:
+      - app
+    networks:
+      - gis-network
+
+  # MySQL Service
+  db:
+    image: mysql:5.7
+    container_name: gis-mysql
+    restart: unless-stopped
+    env_file:
+      - .env  # Simpan variabel MySQL di .env
+    ports:
+      - "3307:3306"
+    volumes:
+      - dbdata:/var/lib/mysql
+    networks:
+      - gis-network
+
+# Docker Networks
+networks:
+  gis-network:
+    driver: bridge
+
+# Docker Volumes
+volumes:
+  dbdata:
+    driver: local
