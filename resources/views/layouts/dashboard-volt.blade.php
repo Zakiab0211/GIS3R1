@@ -122,11 +122,12 @@
             <!--SIDEBAR NAV-->
             <ul class="nav flex-column pt-3 pt-md-0">
                 <li class="nav-item">
-                    <!-- <a href="../../index.html" class="nav-link d-flex align-items-center"> -->
+                    <a href="../../index.html" class="nav-link d-flex align-items-center">
                     <a href="" class="nav-link d-flex align-items-center">
                         <span class="sidebar-icon">
-                            <img src="{{ asset('volt/html&css/assets/img/brand/pensno.jpg') }}" height="20"
-                                width="80" alt="Volt Logo" class="rounded">
+                        <img src="{{ asset('volt/html&css/assets/img/brand/lahan.jpg') }}" 
+                     class="rounded img-fluid"
+                     style="max-width: 35px; height: auto;">
                         </span>
                         <span class="mt-1 ms-1 sidebar-text">GIS Smart Agriculture</span>
                     </a>
@@ -162,37 +163,70 @@
                 </li> -->
 
                 <ul class="nav flex-column">
-    <!-- Smart Soil -->
-    <li class="nav-item {{ Request::is('smartsoil') ? 'active' : '' }}">
-        <a href="{{ route('smartsoil') }}" class="nav-link">
-            <span class="sidebar-icon">
-                <i class="fas fa-seedling fa-fw"></i> <!-- Ikon Tanaman -->
-            </span>
-            <span class="sidebar-text">Smart Soil</span>
-        </a>
-    </li>
+                    <!-- Smart Soil -->
+                    <li class="nav-item {{ Request::is('smartsoil') ? 'active' : '' }}">
+                        <a href="{{ route('smartsoil') }}" class="nav-link">
+                            <span class="sidebar-icon">
+                                <i class="fas fa-seedling fa-fw"></i> <!-- Ikon Tanaman -->
+                            </span>
+                            <span class="sidebar-text">Smart Soil</span>
+                        </a>
+                    </li>
 
-    <!-- Smart Irrigation -->
-    <li class="nav-item {{ Request::is('smartirrigation') ? 'active' : '' }}">
-        <a href="{{ route('smartirrigation') }}" class="nav-link">
-            <span class="sidebar-icon">
-                <i class="fas fa-tint fa-fw"></i> <!-- Ikon Air untuk Irigasi -->
-            </span>
-            <span class="sidebar-text">Smart Irrigation</span>
-        </a>
-    </li>
-</ul>
+                <!-- Smart Irrigation -->
+                <li class="nav-item {{ Request::is('smartirrigation') ? 'active' : '' }}">
+                    <a href="{{ route('smartirrigation') }}" class="nav-link">
+                        <span class="sidebar-icon">
+                            <i class="fas fa-tint fa-fw"></i> <!-- Ikon Air untuk Irigasi -->
+                        </span>
+                        <span class="sidebar-text">Smart Irrigation</span>
+                    </a>
+                </li>
+            </ul>
 
-    <!-- Smart Weather -->
-    <li class="nav-item {{ Request::is('smartweather') ? 'active' : '' }}">
-        <a href="{{ route('smartweather') }}" class="nav-link">
-            <span class="sidebar-icon">
-                <i class="fas fa-cloud-sun-rain fa-fw"></i> <!-- Ikon awan untuk weather -->
-            </span>
-            <span class="sidebar-text">Smart Weather</span>
-        </a>
-    </li>
-</ul>
+                <!-- Smart Weather -->
+                <li class="nav-item {{ Request::is('smartweather') ? 'active' : '' }}">
+                    <a href="{{ route('smartweather') }}" class="nav-link">
+                        <span class="sidebar-icon">
+                            <i class="fas fa-cloud-sun-rain fa-fw"></i> <!-- Ikon awan untuk weather -->
+                        </span>
+                        <span class="sidebar-text">Smart Weather</span>
+                    </a>
+                </li>
+            </ul>
+            <ul class="nav flex-column">
+                <!-- Weather Station -->
+                <li class="nav-item {{ Request::is('weatherstation') ? 'active' : '' }}">
+                    <a href="{{ route('weatherstation') }}" class="nav-link">
+                        <span class="sidebar-icon">
+                            <i class="fas fa-broadcast-tower fa-fw"></i> <!-- Ikon tower untuk stat weather -->
+                        </span>
+                        <span class="sidebar-text">Weather Station</span>
+                    </a>
+                </li>
+            </ul>
+            <ul class="nav flex-column">
+                <!-- HPT -->
+                <li class="nav-item {{ Request::is('smartweather') ? 'active' : '' }}">
+                    <a href="{{ route('smartweather') }}" class="nav-link">
+                        <span class="sidebar-icon">
+                            <i class="fas fa-bug fa-fw"></i> <!-- Ikon bug untuk weather Hpt -->
+                        </span>
+                        <span class="sidebar-text">HPT penyakit tanaman</span>
+                    </a>
+                </li>
+            </ul>
+            <ul class="nav flex-column">
+             <!-- SEBARAN LAHAN -->
+             <li class="nav-item {{ Request::is('smartweather') ? 'active' : '' }}">
+                    <a href="{{ route('smartweather') }}" class="nav-link">
+                        <span class="sidebar-icon">
+                            <i class="fas fa-map-marked-alt fa-fw"></i> <!-- Ikon lahan untuk pemetaan -->
+                        </span>
+                        <span class="sidebar-text">Sebaran Lahan</span>
+                    </a>
+                </li>
+            </ul>
 
 
                 <!--SIDEBAR MENU-->

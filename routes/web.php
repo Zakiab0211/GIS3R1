@@ -27,4 +27,4 @@ Route::get('/smartsoil', [App\Http\Controllers\HomeController::class, 'Smart_Soi
 //Route::get('/smart-soil', [HomeController::class, 'Smart_Soil']);
 Route::get('/smartirrigation', [App\Http\Controllers\HomeController::class, 'Smart_Irrigation'])->name('smartirrigation');
 Route::get('/smartweather', [App\Http\Controllers\HomeController::class, 'Smart_Weather'])->name('smartweather');
-
+Route::get('/weatherstation', [App\Http\Controllers\HomeController::class, 'Weather_Station'])->name('weatherstation');
