@@ -21,7 +21,12 @@
                         <div id="map"></div>
                         <hr>
                         <h5>Data Stasiun Cuaca</h5>
-                        <table class="table table-bordered">
+                        <div class="card">
+                            <div class="card-header">
+                                <h3 class="card-title">Informasi Tabel Cuaca</h3>
+                            </div>
+                        <div class="card-body">
+                            <table id="example1" class="table table-bordered table-striped">
                             <thead>
                                 <tr>
                                     <th>Timestamp</th>
@@ -59,9 +64,18 @@
 @endsection
 
 @push('javascript')
-    <script src="https://unpkg.com/leaflet@1.9.3/dist/leaflet.js" crossorigin=""></script>
+    <script src="https://unpkg.com/leaflet@1.9.3/dist/leaflet.js"
+        integrity="sha256-WBkoXOwTeyKclOHuWtc+i2uENFpDZ9YPdf5Hf+D7ewM=" crossorigin=""></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.4/js/dataTables.bootstrap4.min.js"></script>
+
     <script>
-        var map = L.map('map').setView([-7.4478, 112.7183], 10);
+        $(document).ready(function () {
+            $("#example1").DataTable();
+        });
+
+        var map = L.map('map').setView([-7.4478, 112.7183], 8);
 
         var baseMaps = {
             "Google Streets": L.tileLayer('https://{s}.google.com/vt/lyrs=m&x={x}&y={y}&z={z}', {

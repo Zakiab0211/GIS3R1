@@ -4,6 +4,7 @@
 @section('css')
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.3/dist/leaflet.css"
         integrity="sha256-kLaT2GOSpHechhsozzB+flnD+zUyjE2LlfWPgU04xyI=" crossorigin="" />
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.4/css/dataTables.bootstrap4.min.css">
 
     <style>
         #map {
@@ -23,8 +24,13 @@
                         <div id="map"></div>
                         <hr>
                         <h5>Data Soil</h5>
-                        <table border="3" class="table table-bordered">
-                            <thead>
+                        <div class="card">
+                            <div class="card-header">
+                                <h3 class="card-title">Data-Soil-Sensor</h3>
+                            </div>
+                            <div class="card-body">
+                                <table id="example1" class="table table-bordered table-striped">
+                                <thead>
                                 <tr>
                                     <th>Moisture</th>
                                     <th>Conductivity</th>
@@ -63,9 +69,15 @@
 @push('javascript')
     <script src="https://unpkg.com/leaflet@1.9.3/dist/leaflet.js"
         integrity="sha256-WBkoXOwTeyKclOHuWtc+i2uENFpDZ9YPdf5Hf+D7ewM=" crossorigin=""></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.4/js/dataTables.bootstrap4.min.js"></script>
 
     <script>
-        var map = L.map('map').setView([-7.279090, 112.792796], 7);
+        $(document).ready(function () {
+            $("#example1").DataTable();
+        });
+        var map = L.map('map').setView([-7.279090, 112.792796], 8);
 
         var googleHybrid = L.tileLayer('http://{s}.google.com/vt/lyrs=s,h&x={x}&y={y}&z={z}', {
             maxZoom: 20,

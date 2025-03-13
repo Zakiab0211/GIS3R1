@@ -4,6 +4,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.3/dist/leaflet.css"
         integrity="sha256-kLaT2GOSpHechhsozzB+flnD+zUyjE2LlfWPgU04xyI=" crossorigin="" />
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.4/css/dataTables.bootstrap4.min.css">
     <style>
         #map {
             height: 500px;
@@ -22,51 +23,67 @@
                         <div id="map"></div>
                         <hr>
                         <h5>Data Cuaca</h5>
-                        <table class="table table-bordered">
-                            <thead>
-                                <tr>
-                                    <th>TimeStamp</th>
-                                    <th>Humidity</th>
-                                    <th>Latitude</th>
-                                    <th>Longitude</th>
-                                    <th>Pressure</th>
-                                    <th>Rainfall</th>
-                                    <th>Temperature</th>
-                                    <th>UV</th>
-                                    <th>WindDirection</th>
-                                    <th>WindSpeed</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @foreach($postWeather as $weather)
-                                    <tr>
-                                        <td>{{ $weather->TimeStamp }}</td>
-                                        <td>{{ $weather->Humidity }}%</td>
-                                        <td>{{ $weather->Latitude }}</td>
-                                        <td>{{ $weather->Longitude }}</td>
-                                        <td>{{ $weather->Pressure }} hPa</td>
-                                        <td>{{ $weather->Rainfall }} mm</td>
-                                        <td>{{ $weather->Temperature }} °C</td>
-                                        <td>{{ $weather->UV }}</td>
-                                        <td>{{ $weather->WindDirection }}°</td>
-                                        <td>{{ $weather->WindSpeed }} km/h</td>
-                                    </tr>
-                                @endforeach
-                            </tbody>
-                        </table>
+                        <div class="card">
+                            <div class="card-header">
+                                <h3 class="card-title">Informasi Tabel Cuaca</h3>
+                            </div>
+                            <div class="card-body">
+                                <table id="example1" class="table table-bordered table-striped">
+                                    <thead>
+                                        <tr>
+                                            <th>TimeStamp</th>
+                                            <th>Humidity</th>
+                                            <th>Latitude</th>
+                                            <th>Longitude</th>
+                                            <th>Pressure</th>
+                                            <th>Rainfall</th>
+                                            <th>Temperature</th>
+                                            <th>UV</th>
+                                            <th>WindDirection</th>
+                                            <th>WindSpeed</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach($postWeather as $weather)
+                                            <tr>
+                                                <td>{{ $weather->TimeStamp }}</td>
+                                                <td>{{ $weather->Humidity }}%</td>
+                                                <td>{{ $weather->Latitude }}</td>
+                                                <td>{{ $weather->Longitude }}</td>
+                                                <td>{{ $weather->Pressure }} hPa</td>
+                                                <td>{{ $weather->Rainfall }} mm</td>
+                                                <td>{{ $weather->Temperature }} °C</td>
+                                                <td>{{ $weather->UV }}</td>
+                                                <td>{{ $weather->WindDirection }}°</td>
+                                                <td>{{ $weather->WindSpeed }} km/h</td>
+                                            </tr>
+                                        @endforeach
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
+
 @endsection
 
 @push('javascript')
     <script src="https://unpkg.com/leaflet@1.9.3/dist/leaflet.js"
         integrity="sha256-WBkoXOwTeyKclOHuWtc+i2uENFpDZ9YPdf5Hf+D7ewM=" crossorigin=""></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.4/js/dataTables.bootstrap4.min.js"></script>
+
     <script>
-        var map = L.map('map').setView([-7.279090, 112.792796], 7);
-        
+        $(document).ready(function () {
+            $("#example1").DataTable();
+        });
+
+        var map = L.map('map').setView([-7.279090, 112.792796], 8);
+
         var baseMaps = {
             "Google Streets": L.tileLayer('http://{s}.google.com/vt/lyrs=m&x={x}&y={y}&z={z}', {
                 maxZoom: 20, subdomains: ['mt0', 'mt1', 'mt2', 'mt3']
@@ -78,17 +95,17 @@
                 maxZoom: 20, subdomains: ['mt0', 'mt1', 'mt2', 'mt3']
             })
         };
-        
+
         L.control.layers(baseMaps).addTo(map);
         baseMaps["Google Hybrid"].addTo(map);
-        
+
         var iconMarker = L.icon({
             iconUrl: '{{ asset("iconMarkers/cloudy.png") }}',
             iconSize: [50, 50],
             iconAnchor: [25, 50],
             popupAnchor: [0, -50]
         });
-        
+
         @foreach($postWeather as $weather)
         var popup = L.popup()
         .setLatLng([-7.235664, 112.553034])
