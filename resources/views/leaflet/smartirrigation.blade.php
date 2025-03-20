@@ -25,7 +25,7 @@
                 $parameters = [
                     ['label' => 'Curah Hujan ( /mm)', 'value' => $irrigation->curah_hujan, 'icon' => 'fas fa-tint', 'color' => 'primary'],
                     ['label' => 'Liquid Volume ( /ℓ)', 'value' => $irrigation->liquid_volume, 'icon' => 'fas fa-bolt', 'color' => 'secondary'],
-                    ['label' => 'Timestamp (dd/mm/yyyy)', 'value' => $irrigation->timestamp, 'icon' => 'fas fa-clock', 'color' => 'warning'],
+                    ['label' => 'Timestamp (dd/mm/yyyy)', 'value' => $irrigation->timestamp, 'icon' => 'fas fa-clock', 'color' => 'info'],
                     ['label' => 'Flow Rate ( L/s)', 'value' => $irrigation->flow_rate, 'icon' => 'fas fa-vial', 'color' => 'success'],
                     ['label' => 'Jarak ( /M)', 'value' => $irrigation->jarak, 'icon' => 'fas fa-ruler', 'color' => 'danger']
                 ];

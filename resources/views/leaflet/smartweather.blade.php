@@ -28,7 +28,7 @@
                     ['label' => 'WindSpeed ( km/h)', 'value' => $weather->WindSpeed, 'icon' => 'fas fa-wind', 'color' => 'primary'],
                     ['label' => 'Temperature (°C)', 'value' => $weather->Temperature, 'icon' => 'fas fa-thermometer-half', 'color' => 'success'],
                     ['label' => 'UV ', 'value' => $weather->UV, 'icon' => 'fas fa-sun', 'color' => 'danger'],
-                    ['label' => 'WindDirection (°)', 'value' => $weather->WindDirection, 'icon' => 'fas fa-compass', 'color' => 'success']
+                    ['label' => 'WindDirection (°)', 'value' => $weather->WindDirection, 'icon' => 'fas fa-compass', 'color' => 'info']
                 ];
             @endphp
             @foreach($parameters as $param)
