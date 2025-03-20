@@ -12,6 +12,9 @@
 @endsection
 
 @section('content')
+<!-- awal kode -->
+ 
+<!-- batas kode -->
     <div class="container-fluid">
         <div class="row justify-content-center">
             <div class="col-lg-12">

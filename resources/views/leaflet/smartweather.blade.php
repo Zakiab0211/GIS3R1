@@ -14,6 +14,52 @@
 @endsection
 
 @section('content')
+
+<!-- awal kode -->
+
+ <!-- awal kode untuk card -->
+ <div class="container-fluid">
+    <div class="row">
+        @foreach($postWeather as $weather)
+            @php
+                $parameters = [
+                    ['label' => 'Humidity (%)', 'value' => $weather->Humidity, 'icon' => 'fas fa-tint', 'color' => 'primary'],
+                    ['label' => 'Pressure ( /hPa)', 'value' => $weather->Pressure, 'icon' => 'fas fa-tachometer-alt', 'color' => 'secondary'],
+                    ['label' => 'WindSpeed ( km/h)', 'value' => $weather->WindSpeed, 'icon' => 'fas fa-wind', 'color' => 'primary'],
+                    ['label' => 'Temperature (°C)', 'value' => $weather->Temperature, 'icon' => 'fas fa-thermometer-half', 'color' => 'success'],
+                    ['label' => 'UV ', 'value' => $weather->UV, 'icon' => 'fas fa-sun', 'color' => 'danger'],
+                    ['label' => 'WindDirection (°)', 'value' => $weather->WindDirection, 'icon' => 'fas fa-compass', 'color' => 'success']
+                ];
+            @endphp
+            @foreach($parameters as $param)
+                <div class="col-12 col-sm-6 col-xl-4 mb-4">
+                    <div class="card border-0 shadow">
+                        <div class="card-body">
+                            <div class="row d-block d-xl-flex align-items-center">
+                                <div class="col-12 col-xl-5 text-xl-center mb-3 mb-xl-0 d-flex align-items-center justify-content-xl-center">
+                                    <div class="icon-shape icon-shape-{{ $param['color'] }} rounded me-4 me-sm-0">
+                                        <i class="{{ $param['icon'] }}"></i>
+                                    </div>
+                                    <div class="d-sm-none">
+                                        <h2 class="h5">{{ $param['label'] }}</h2>
+                                        <h3 class="fw-extrabold mb-1">{{ $param['value'] }}</h3>
+                                    </div>
+                                </div>
+                                <div class="col-12 col-xl-7 px-xl-0">
+                                    <div class="d-none d-sm-block">
+                                        <h2 class="h6 text-gray-400 mb-0">{{ $param['label'] }}</h2>
+                                        <h3 class="fw-extrabold mb-2">{{ $param['value'] }}</h3>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            @endforeach
+        <!-- @endforeach
+    </div>
+</div> -->
+<!-- bataskode -->
     <div class="container">
         <div class="row justify-content-center">
             <div class="col-md-12">
