@@ -1,7 +1,8 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\SmartSoilController;
+use App\Http\Controllers\SWeatherController;
+use App\Http\Controllers\CloudWatchController;
 
 /*
 |--------------------------------------------------------------------------
@@ -23,8 +24,8 @@ Route::post('/logout', [AuthenticatedSessionController::class, 'destroy'])
 //Auth::routes();
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
-Route::get('/smartsoil', [App\Http\Controllers\HomeController::class, 'Smart_Soil'])->name('smartsoil');
+Route::get('/smartsoil', [App\Http\Controllers\SoilController::class, 'Smart_Soil'])->name('smartsoil');
 //Route::get('/smart-soil', [HomeController::class, 'Smart_Soil']);
-Route::get('/smartirrigation', [App\Http\Controllers\HomeController::class, 'Smart_Irrigation'])->name('smartirrigation');
-Route::get('/smartweather', [App\Http\Controllers\HomeController::class, 'Smart_Weather'])->name('smartweather');
-Route::get('/weatherstation', [App\Http\Controllers\HomeController::class, 'Weather_Station'])->name('weatherstation');
+Route::get('/smartirrigation', [App\Http\Controllers\IrrigationController::class, 'Smart_Irrigation'])->name('smartirrigation');
+Route::get('/smartweather', [App\Http\Controllers\SWeatherController::class, 'Smart_Weather'])->name('smartweather');
+Route::get('/weatherstation', [App\Http\Controllers\WeatherSTATController::class, 'Weather_Station'])->name('weatherstation');

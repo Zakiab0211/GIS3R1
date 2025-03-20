@@ -25,6 +25,7 @@
 @extends('layouts.dashboard-volt')
 
 @section('content')
+
 <div class="col-12 col-sm-6 col-xl-4 mb-4">
     <div class="card border-0 shadow">
         <div class="card-body">
@@ -161,4 +162,156 @@
         </div>
     </div>
 </div>
+<!-- Tambahkan container untuk grafik -->
+<!-- Tambahkan container untuk grafik -->
+<div class="row">
+    <!-- CPU Utilization Chart (Line) -->
+    <div class="col-12 col-xl-6 mb-4">
+        <div class="card border-0 shadow">
+            <div class="card-header">
+                <h5 class="mb-0">CPU Utilization (%)</h5>
+            </div>
+            <div class="card-body">
+                <canvas id="cpuChart" height="300"></canvas>
+            </div>
+        </div>
+    </div>
+
+    <!-- Network Byte Out Chart (Bar) -->
+    <div class="col-12 col-xl-6 mb-4">
+        <div class="card border-0 shadow">
+            <div class="card-header">
+                <h5 class="mb-0">Network Byte Out (KBps)</h5>
+            </div>
+            <div class="card-body">
+                <canvas id="networkChart" height="300"></canvas>
+            </div>
+        </div>
+    </div>
+
+    <!-- Memory Used Chart (Flot - Real Time) -->
+    <div class="col-12 col-xl-6 mb-4">
+        <div class="card border-0 shadow">
+            <div class="card-header">
+                <h5 class="mb-0">Memory Used (GB)</h5>
+            </div>
+            <div class="card-body">
+                <div id="memoryChart" style="height: 300px;"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Check Status Failed Chart (Doughnut) -->
+    <div class="col-12 col-xl-6 mb-4">
+        <div class="card border-0 shadow">
+            <div class="card-header">
+                <h5 class="mb-0">Failed Checks</h5>
+            </div>
+            <div class="card-body">
+                <canvas id="failedChart" height="300"></canvas>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Tambahkan Chart.js -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<!-- Tambahkan jQuery dan Flot.js -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/flot/0.8.0/jquery.flot.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/flot/0.8.0/jquery.flot.time.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/flot/0.8.0/jquery.flot.resize.min.js"></script>
+
+<script>
+    // Data real-time
+    let cpuData = Array(10).fill(50); // Mulai dengan nilai 50%
+    let networkData = Array(10).fill(100); // Mulai dengan nilai 100 KBps
+    let failedChecksData = [5, 10, 3, 7, 8]; // Data random gagal
+    let memoryData = [{ data: [], color: '#dc3545', label: 'Memory Used (GB)' }];
+
+    // Fungsi untuk menghitung moving average agar CPU stabil
+    function movingAverage(data, windowSize) {
+        return data.slice(-windowSize).reduce((a, b) => a + b, 0) / windowSize;
+    }
+
+    // Inisialisasi grafik Chart.js
+    let cpuChart = new Chart(document.getElementById('cpuChart').getContext('2d'), {
+        type: 'line',
+        data: {
+            labels: Array.from({ length: 10 }, (_, i) => `T-${i * 3}s`),
+            datasets: [{
+                label: 'CPU Utilization (%)',
+                data: cpuData,
+                backgroundColor: 'rgba(54, 162, 235, 0.5)',
+                borderColor: 'rgba(54, 162, 235, 1)',
+                borderWidth: 2,
+                fill: true
+            }]
+        },
+        options: { responsive: true, maintainAspectRatio: false }
+    });
+
+    let networkChart = new Chart(document.getElementById('networkChart').getContext('2d'), {
+        type: 'line',
+        data: {
+            labels: Array.from({ length: 10 }, (_, i) => `T-${i * 3}s`),
+            datasets: [{
+                label: 'Network Byte Out (KBps)',
+                data: networkData,
+                backgroundColor: 'rgba(255, 206, 86, 0.5)',
+                borderColor: 'rgba(255, 206, 86, 1)',
+                borderWidth: 1
+            }]
+        },
+        options: { responsive: true, maintainAspectRatio: false }
+    });
+
+    let failedChart = new Chart(document.getElementById('failedChart').getContext('2d'), {
+        type: 'bar',
+        data: {
+            labels: ['instances 1', 'instances 2', 'instances 3', 'instances 4', 'instances 5'],
+            datasets: [{
+                label: 'Failed Checks',
+                data: failedChecksData,
+                backgroundColor: ['rgba(255, 99, 132, 0.6)', 'rgba(54, 162, 235, 0.6)', 'rgba(75, 192, 192, 0.6)', 'rgba(255, 206, 86, 0.6)', 'rgba(153, 102, 255, 0.6)']
+            }]
+        },
+        options: { responsive: true, maintainAspectRatio: false }
+    });
+
+    function updateCharts() {
+        let newCpu = Math.random() * 20 + 40; // Nilai antara 40-60
+        cpuData.push(movingAverage([...cpuData, newCpu], 5));
+        cpuData.shift();
+        cpuChart.data.datasets[0].data = cpuData;
+        cpuChart.update();
+
+        let newNetwork = Math.random() * 50 + 80; // Nilai antara 80-130
+        networkData.push(newNetwork);
+        networkData.shift();
+        networkChart.data.datasets[0].data = networkData;
+        networkChart.update();
+
+        let newFailed = Math.floor(Math.random() * 10);
+        failedChecksData[Math.floor(Math.random() * 5)] = newFailed;
+        failedChart.data.datasets[0].data = failedChecksData;
+        failedChart.update();
+    }
+
+    function generateMemoryData() {
+        var now = new Date().getTime();
+        memoryData[0].data.push([now, Math.random() * 2 + 4]); // Memory antara 4-6GB
+        if (memoryData[0].data.length > 10) memoryData[0].data.shift();
+        $.plot('#memoryChart', memoryData, {
+            series: { lines: { show: true, lineWidth: 2, fill: true } },
+            xaxis: { mode: 'time', timeformat: '%H:%M:%S' },
+            yaxis: { min: 4, max: 6 }
+        });
+    }
+
+    // Jalankan update setiap 3 detik
+    setInterval(updateCharts, 3000);
+    setInterval(generateMemoryData, 3000);
+</script>
 @endsection

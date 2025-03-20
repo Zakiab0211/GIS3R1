@@ -73,9 +73,12 @@ services:
     container_name: webgis-app
     restart: unless-stopped
     tty: true
+    env_file:
+      - .env
     environment:
       SERVICE_NAME: app
       SERVICE_TAGS: dev
+      EC2_INSTANCE_ID: i-0566d7bbcc2e0e6a9  # Tambahkan ini
     working_dir: /var/www
     volumes:
       - .:/var/www
