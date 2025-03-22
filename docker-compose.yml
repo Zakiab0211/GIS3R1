@@ -61,10 +61,81 @@
 #   dbdata:
 #     driver: local
 
+# version: '3.8'
+
+# services:
+#   # PHP Laravel Service
+#   app:
+#     build:
+#       context: .
+#       dockerfile: Dockerfile
+#     image: webgis-app
+#     container_name: webgis-app
+#     restart: unless-stopped
+#     tty: true
+#     env_file:
+#       - .env
+#     environment:
+#       SERVICE_NAME: app
+#       SERVICE_TAGS: dev
+#       EC2_INSTANCE_ID: i-0566d7bbcc2e0e6a9  # Tambahkan ini
+#     working_dir: /var/www
+#     volumes:
+#       - .:/var/www
+#       - ./docker-compose/php/local.ini:/usr/local/etc/php/conf.d/local.ini
+#     depends_on:
+#       - db
+#     networks:
+#       - gis-network
+
+#   # Nginx Service
+#   webserver:
+#     image: nginx:alpine
+#     container_name: gis-nginx
+#     restart: unless-stopped
+#     tty: true
+#     ports:
+#       - "80:80"  # Perbaikan di sini (Container Nginx tetap di port 80)
+#     volumes:
+#       - .:/var/www
+#       - ./docker-compose/nginx/default.conf:/etc/nginx/conf.d/default.conf
+#     depends_on:
+#       - app
+#     networks:
+#       - gis-network
+
+#   # MySQL Service
+#   db:
+#     image: mysql:8.0
+#     restart: always
+#     container_name: gis-mysql
+#     environment:
+#       MYSQL_DATABASE: giseri
+#       MYSQL_USER: rootnow
+#       MYSQL_PASSWORD: rootnow
+#       MYSQL_ROOT_PASSWORD: rootnow
+#     ports:
+#       - "3307:3306"  # Perbaikan di sini (Container tetap di 3306)
+#     volumes:
+#       - dbdata:/var/lib/mysql
+#       - ./giseri.sql:/docker-entrypoint-initdb.d/giseri.sql
+#     networks:
+#       - gis-network
+
+# # Docker Networks
+# networks:
+#   gis-network:
+#     driver: bridge
+
+# # Docker Volumes
+# volumes:
+#   dbdata:
+#     driver: local
+
+####with cloud front###################
 version: '3.8'
 
 services:
-  # PHP Laravel Service
   app:
     build:
       context: .
@@ -78,7 +149,8 @@ services:
     environment:
       SERVICE_NAME: app
       SERVICE_TAGS: dev
-      EC2_INSTANCE_ID: i-0566d7bbcc2e0e6a9  # Tambahkan ini
+      EC2_INSTANCE_ID: i-0566d7bbcc2e0e6a9
+      TRUSTED_PROXIES: "*"  # Tambahkan ini agar request dari ALB & CloudFront bisa diterima
     working_dir: /var/www
     volumes:
       - .:/var/www
@@ -88,14 +160,13 @@ services:
     networks:
       - gis-network
 
-  # Nginx Service
   webserver:
     image: nginx:alpine
     container_name: gis-nginx
     restart: unless-stopped
     tty: true
     ports:
-      - "80:80"  # Perbaikan di sini (Container Nginx tetap di port 80)
+      - "80:80"
     volumes:
       - .:/var/www
       - ./docker-compose/nginx/default.conf:/etc/nginx/conf.d/default.conf
@@ -104,7 +175,6 @@ services:
     networks:
       - gis-network
 
-  # MySQL Service
   db:
     image: mysql:8.0
     restart: always
@@ -115,19 +185,17 @@ services:
       MYSQL_PASSWORD: rootnow
       MYSQL_ROOT_PASSWORD: rootnow
     ports:
-      - "3307:3306"  # Perbaikan di sini (Container tetap di 3306)
+      - "3307:3306"
     volumes:
       - dbdata:/var/lib/mysql
       - ./giseri.sql:/docker-entrypoint-initdb.d/giseri.sql
     networks:
       - gis-network
 
-# Docker Networks
 networks:
   gis-network:
     driver: bridge
 
-# Docker Volumes
 volumes:
   dbdata:
     driver: local
