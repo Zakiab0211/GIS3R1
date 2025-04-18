@@ -181,9 +181,9 @@ services:
     container_name: gis-mysql
     environment:
       MYSQL_DATABASE: giseri
-      MYSQL_USER: root
-      MYSQL_PASSWORD: root
-      MYSQL_ROOT_PASSWORD: root
+      MYSQL_USER: rootnow
+      MYSQL_PASSWORD: rootnow
+      MYSQL_ROOT_PASSWORD: rootnow
     ports:
       - "3307:3306"
     volumes:
