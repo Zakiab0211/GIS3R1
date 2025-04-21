@@ -149,7 +149,7 @@ services:
     environment:
       SERVICE_NAME: app
       SERVICE_TAGS: dev
-      EC2_INSTANCE_ID: i-0566d7bbcc2e0e6a9
+      EC2_INSTANCE_ID: i-0e3e3c411bc1daab7
       TRUSTED_PROXIES: "*"  # Tambahkan ini agar request dari ALB & CloudFront bisa diterima
     working_dir: /var/www
     volumes:
