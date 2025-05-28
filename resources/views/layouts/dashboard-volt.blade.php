@@ -211,8 +211,8 @@
             </ul>
             <ul class="nav flex-column">
                 <!-- HPT -->
-                <li class="nav-item {{ Request::is('smartweather') ? 'active' : '' }}">
-                    <a href="{{ route('smartweather') }}" class="nav-link">
+                <li class="nav-item {{ Request::is('hpt') ? 'active' : '' }}">
+                    <a href="{{ route('hpt') }}" class="nav-link">
                         <span class="sidebar-icon">
                             <i class="fas fa-bug fa-fw"></i> <!-- Ikon bug untuk weather Hpt -->
                         </span>
@@ -222,8 +222,8 @@
             </ul>
             <ul class="nav flex-column">
              <!-- SEBARAN LAHAN -->
-             <li class="nav-item {{ Request::is('smartweather') ? 'active' : '' }}">
-                    <a href="{{ route('smartweather') }}" class="nav-link">
+             <li class="nav-item {{ Request::is('lahan') ? 'active' : '' }}">
+                    <a href="{{ route('lahan') }}" class="nav-link">
                         <span class="sidebar-icon">
                             <i class="fas fa-map-marked-alt fa-fw"></i> <!-- Ikon lahan untuk pemetaan -->
                         </span>

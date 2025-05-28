@@ -25,9 +25,8 @@ Route::post('/logout', [AuthenticatedSessionController::class, 'destroy'])
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 Route::get('/smartsoil', [App\Http\Controllers\SoilController::class, 'Smart_Soil'])->name('smartsoil');
-//Route::get('/smart-soil', [HomeController::class, 'Smart_Soil']);
 Route::get('/smartirrigation', [App\Http\Controllers\IrrigationController::class, 'Smart_Irrigation'])->name('smartirrigation');
 Route::get('/smartweather', [App\Http\Controllers\SWeatherController::class, 'Smart_Weather'])->name('smartweather');
 Route::get('/weatherstation', [App\Http\Controllers\WeatherSTATController::class, 'Weather_Station'])->name('weatherstation');
-Route::get ('/hpt');
-Route::get ('/lahan');
+Route::get ('/hpt', [App\Http\Controllers\hptController::class, 'Hpt'])->name('hpt');
+Route::get ('/lahan', [App\Http\Controllers\lahanController::class, 'Lahan'])->name('lahan');

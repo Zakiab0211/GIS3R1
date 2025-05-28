@@ -5,10 +5,10 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class hpt extends Model
+class lahan extends Model
 {
-    protected $table = 'hpt'; // Nama tabel di database
+    protected $table = 'lahan'; // Nama tabel di database
     protected $fillable = [
-        'hama', 'keterangan', 'gambar'
+        'lahan sawah', 'keterangan', 'gambar'
     ];
 }
