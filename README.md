@@ -73,6 +73,11 @@ Dokumentasi ini menjelaskan langkah-langkah menjalankan aplikasi menggunakan **D
 
 ---
 
+## 📷 Tampilan Aplikasi
+![GIS3R1 Screenshot](https://raw.githubusercontent.com/Zakiab0211/GIS3R1/main/public/hama/webgisa.jpg)
+
+---
+
 ## ✅ Prasyarat
 Sebelum mulai pastikan:
 - Akun **AWS EC2** dengan Ubuntu 22.04 (atau terbaru).
