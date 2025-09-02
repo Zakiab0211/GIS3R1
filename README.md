@@ -84,152 +84,171 @@ Sebelum mulai pastikan:
 
 ## 🛠️ Setup di Server EC2
 
-### 1. Login ke server
-```bash
-- ssh -i your-key.pem ubuntu@your-ec2-public-ip
+1. **Login ke server**
+    ```bash
+    ssh -i your-key.pem ubuntu@your-ec2-public-ip
+    ```
 
-2. Update & install dependensi
-sudo apt update -y && sudo apt upgrade -y
-sudo apt install -y git unzip curl docker.io docker-compose
-sudo systemctl enable docker
-sudo systemctl start docker
+2. **Update & install dependensi**
+    ```bash
+    sudo apt update -y && sudo apt upgrade -y
+    sudo apt install -y git unzip curl docker.io docker-compose
+    sudo systemctl enable docker
+    sudo systemctl start docker
+    ```
 
-3. Clone repository
-git clone https://github.com/Zakiab0211/GIS3R1.git
-cd GIS3R1
+3. **Clone repository**
+    ```bash
+    git clone https://github.com/Zakiab0211/GIS3R1.git
+    cd GIS3R1
+    ```
 
-4. Copy file environment
-cp .env.example .env
+4. **Copy file environment**
+    ```bash
+    cp .env.example .env
+    ```
 
-5. Edit .env
-APP_NAME=LaravelGIS
-APP_ENV=production
-APP_KEY=
-APP_DEBUG=false
-APP_URL=http://your-ec2-public-ip
+5. **Edit `.env`**
+    ```env
+    APP_NAME=LaravelGIS
+    APP_ENV=production
+    APP_KEY=
+    APP_DEBUG=false
+    APP_URL=http://your-ec2-public-ip
 
-DB_CONNECTION=mysql
-DB_HOST=db
-DB_PORT=3306
-DB_DATABASE=gisdb
-DB_USERNAME=gisuser
-DB_PASSWORD=gispwd
+    DB_CONNECTION=mysql
+    DB_HOST=db
+    DB_PORT=3306
+    DB_DATABASE=gisdb
+    DB_USERNAME=gisuser
+    DB_PASSWORD=gispwd
+    ```
 
-6. Setup Docker Compose
-Buat file docker-compose.yml:
-version: '3.8'
+6. **Setup Docker Compose**  
+   Buat file `docker-compose.yml`:
+    ```yaml
+    version: '3.8'
 
-services:
-  app:
-    build:
-      context: .
-      dockerfile: Dockerfile
-    container_name: laravel_app
-    restart: unless-stopped
-    working_dir: /var/www
+    services:
+      app:
+        build:
+          context: .
+          dockerfile: Dockerfile
+        container_name: laravel_app
+        restart: unless-stopped
+        working_dir: /var/www
+        volumes:
+          - .:/var/www
+        networks:
+          - laravel
+
+      db:
+        image: mysql:8.0
+        container_name: laravel_db
+        restart: unless-stopped
+        environment:
+          MYSQL_DATABASE: gisdb
+          MYSQL_USER: gisuser
+          MYSQL_PASSWORD: gispwd
+          MYSQL_ROOT_PASSWORD: rootpwd
+        ports:
+          - "3306:3306"
+        volumes:
+          - db_data:/var/lib/mysql
+        networks:
+          - laravel
+
+      nginx:
+        image: nginx:alpine
+        container_name: laravel_nginx
+        restart: unless-stopped
+        ports:
+          - "80:80"
+        volumes:
+          - .:/var/www
+          - ./docker-compose/nginx:/etc/nginx/conf.d
+        depends_on:
+          - app
+        networks:
+          - laravel
+
     volumes:
-      - .:/var/www
+      db_data:
+
     networks:
-      - laravel
+      laravel:
+        driver: bridge
+    ```
 
-  db:
-    image: mysql:8.0
-    container_name: laravel_db
-    restart: unless-stopped
-    environment:
-      MYSQL_DATABASE: gisdb
-      MYSQL_USER: gisuser
-      MYSQL_PASSWORD: gispwd
-      MYSQL_ROOT_PASSWORD: rootpwd
-    ports:
-      - "3306:3306"
-    volumes:
-      - db_data:/var/lib/mysql
-    networks:
-      - laravel
+7. **Konfigurasi Nginx**  
+   File: `docker-compose/nginx/default.conf`
+    ```nginx
+    server {
+        listen 80;
+        index index.php index.html;
+        server_name _;
 
-  nginx:
-    image: nginx:alpine
-    container_name: laravel_nginx
-    restart: unless-stopped
-    ports:
-      - "80:80"
-    volumes:
-      - .:/var/www
-      - ./docker-compose/nginx:/etc/nginx/conf.d
-    depends_on:
-      - app
-    networks:
-      - laravel
+        root /var/www/public;
 
-volumes:
-  db_data:
+        location / {
+            try_files $uri $uri/ /index.php?$query_string;
+        }
 
-networks:
-  laravel:
-    driver: bridge
+        location ~ \.php$ {
+            fastcgi_pass app:9000;
+            fastcgi_index index.php;
+            fastcgi_param SCRIPT_FILENAME $realpath_root$fastcgi_script_name;
+            include fastcgi_params;
+        }
 
-7. Konfigurasi Nginx
-File: docker-compose/nginx/default.conf
-
-server {
-    listen 80;
-    index index.php index.html;
-    server_name _;
-
-    root /var/www/public;
-
-    location / {
-        try_files $uri $uri/ /index.php?$query_string;
+        location ~ /\.ht {
+            deny all;
+        }
     }
+    ```
 
-    location ~ \.php$ {
-        fastcgi_pass app:9000;
-        fastcgi_index index.php;
-        fastcgi_param SCRIPT_FILENAME $realpath_root$fastcgi_script_name;
-        include fastcgi_params;
-    }
+8. **Buat `Dockerfile` Laravel**
+    ```dockerfile
+    FROM php:8.2-fpm
 
-    location ~ /\.ht {
-        deny all;
-    }
-}
+    # Install dependencies
+    RUN apt-get update && apt-get install -y \
+        git curl zip unzip libpng-dev libonig-dev libxml2-dev libzip-dev \
+        && docker-php-ext-install pdo_mysql mbstring exif pcntl bcmath gd zip
 
-8. Buat Dockerfile Laravel
-FROM php:8.2-fpm
+    # Install Composer
+    COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 
-# Install dependencies
-RUN apt-get update && apt-get install -y \
-    git curl zip unzip libpng-dev libonig-dev libxml2-dev libzip-dev \
-    && docker-php-ext-install pdo_mysql mbstring exif pcntl bcmath gd zip
+    WORKDIR /var/www
+    COPY . .
 
-# Install Composer
-COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
+    RUN composer install --no-dev --optimize-autoloader
+    RUN php artisan config:clear && php artisan route:clear && php artisan cache:clear
 
-WORKDIR /var/www
-COPY . .
+    CMD ["php-fpm"]
+    ```
 
-RUN composer install --no-dev --optimize-autoloader
-RUN php artisan config:clear && php artisan route:clear && php artisan cache:clear
+9. **Menjalankan Aplikasi**
+    ```bash
+    docker-compose up -d --build
+    docker ps
+    ```
 
-CMD ["php-fpm"]
+10. **Inisialisasi Laravel**
+    ```bash
+    docker exec -it laravel_app bash
+    php artisan key:generate
+    php artisan migrate --seed
+    exit
+    ```
 
-9. Menjalankan Aplikasi
-docker-compose up -d --build
-docker ps
+11. **Uji akses aplikasi**
+    - Local: http://localhost  
+    - EC2: http://your-ec2-public-ip  
+    - Domain: arahkan DNS ke EC2 dan sesuaikan `APP_URL` di `.env`.
 
-10. Inisialisasi Laravel
-
-docker exec -it laravel_app bash
-php artisan key:generate
-php artisan migrate --seed
-exit
-
-11. Uji akses aplikasi
-Local: http://localhost
-EC2: http://your-ec2-public-ip
-Domain: arahkan DNS ke EC2 dan sesuaikan APP_URL di .env.
-
-12. (Opsional) Tambah SSL
-sudo apt install certbot python3-certbot-nginx -y
-sudo certbot --nginx -d yourdomain.com -d www.yourdomain.com
+12. **(Opsional) Tambah SSL**
+    ```bash
+    sudo apt install certbot python3-certbot-nginx -y
+    sudo certbot --nginx -d yourdomain.com -d www.yourdomain.com
+    ```
