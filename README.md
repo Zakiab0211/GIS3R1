@@ -88,24 +88,20 @@ Sebelum mulai pastikan:
 ```bash
 - ssh -i your-key.pem ubuntu@your-ec2-public-ip
 
-### 2. Update & install dependensi
-```bash
-- sudo apt update -y && sudo apt upgrade -y
-- sudo apt install -y git unzip curl docker.io docker-compose
-- sudo systemctl enable docker
-- sudo systemctl start docker
+2. Update & install dependensi
+sudo apt update -y && sudo apt upgrade -y
+sudo apt install -y git unzip curl docker.io docker-compose
+sudo systemctl enable docker
+sudo systemctl start docker
 
-### 3. Clone repository
-```bash
-- git clone https://github.com/Zakiab0211/GIS3R1.git
-- cd GIS3R1
+3. Clone repository
+git clone https://github.com/Zakiab0211/GIS3R1.git
+cd GIS3R1
 
-### Copy file environment:
-```bash
-- cp .env.example .env
+4. Copy file environment
+cp .env.example .env
 
-### Edit .env:
-```bash
+5. Edit .env
 APP_NAME=LaravelGIS
 APP_ENV=production
 APP_KEY=
@@ -119,9 +115,8 @@ DB_DATABASE=gisdb
 DB_USERNAME=gisuser
 DB_PASSWORD=gispwd
 
-### 📦 Docker Compose Setup
-```bash
-docker-compose.yml
+6. Setup Docker Compose
+Buat file docker-compose.yml:
 version: '3.8'
 
 services:
@@ -174,10 +169,9 @@ networks:
   laravel:
     driver: bridge
 
-Konfigurasi Nginx
+7. Konfigurasi Nginx
+File: docker-compose/nginx/default.conf
 
-### File: docker-compose/nginx/default.conf
-```bash
 server {
     listen 80;
     index index.php index.html;
@@ -201,18 +195,15 @@ server {
     }
 }
 
-
-Dockerfile Laravel
+8. Buat Dockerfile Laravel
 FROM php:8.2-fpm
 
-### Install dependencies
-```bash
+# Install dependencies
 RUN apt-get update && apt-get install -y \
     git curl zip unzip libpng-dev libonig-dev libxml2-dev libzip-dev \
     && docker-php-ext-install pdo_mysql mbstring exif pcntl bcmath gd zip
 
-### Install Composer
-```bash
+# Install Composer
 COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 
 WORKDIR /var/www
@@ -223,53 +214,22 @@ RUN php artisan config:clear && php artisan route:clear && php artisan cache:cle
 
 CMD ["php-fpm"]
 
-###▶️ Menjalankan Aplikasi
-### Build & jalankan container:
-```bash
-- docker-compose up -d --build
+9. Menjalankan Aplikasi
+docker-compose up -d --build
+docker ps
 
-### Cek status container:
-```bash
-- docker ps
+10. Inisialisasi Laravel
 
-### Masuk ke container app lalu generate key & migrate database:
-### Masuk ke container app:
-```bash
-- docker exec -it laravel_app bash
-- php artisan key:generate
-- php artisan migrate --seed
-- exit
+docker exec -it laravel_app bash
+php artisan key:generate
+php artisan migrate --seed
+exit
 
-### 🌐 Uji Akses
-```bash
-- Buka di browser:
-- Local: http://localhost
-- EC2: http://your-ec2-public-ip
-- Jika pakai domain, arahkan DNS ke IP EC2 lalu sesuaikan APP_URL di .env.
+11. Uji akses aplikasi
+Local: http://localhost
+EC2: http://your-ec2-public-ip
+Domain: arahkan DNS ke EC2 dan sesuaikan APP_URL di .env.
 
-### 🔒 SSL (Opsional)
-Jika ingin HTTPS, gunakan Nginx Proxy Manager atau nginx-proxy + certbot container.
-Contoh cepat (manual certbot di host EC2):
-```bash
-- sudo apt install certbot python3-certbot-nginx -y
-- sudo certbot --nginx -d yourdomain.com -d www.yourdomain.com
-
-### 👨‍💻 Panduan Developer
-```bash
-- Clone repo → git clone ...
-- Copy .env.example → .env
-- Jalankan Docker → docker-compose up -d --build
-- Generate key + migrate DB → artisan command
-- Akses via browser http://localhost (local) atau http://EC2-IP
-
-### 📌 Catatan
-```bash
-- Database akan tersimpan di volume db_data.
-- Gunakan php artisan migrate:refresh --seed jika ingin reset DB.
-
-### Untuk debug, jalankan:
-```bash
-- docker logs laravel_app
-- docker exec -it laravel_app bash
-
-## MIT License © 2024 Zakiab0211
+12. (Opsional) Tambah SSL
+sudo apt install certbot python3-certbot-nginx -y
+sudo certbot --nginx -d yourdomain.com -d www.yourdomain.com
