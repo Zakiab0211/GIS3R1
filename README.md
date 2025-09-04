@@ -22,6 +22,8 @@ Laravel V.10 is a web application framework with expressive, elegant syntax. We 
 Laravel is accessible, powerful, and provides tools required for large, robust applications.
 
 **[Cek Medium saya:](https://medium.com/@zakiabdullahfaiq/membuat-webgis-interaktif-dengan-laravel-mysql-dan-leaflet-studi-kasus-smart-agriculture-f7dc47469a68)**
+**(https://medium.com/@zakiabdullahfaiq/membuat-webgis-interaktif-dengan-laravel-mysql-dan-leaflet-studi-kasus-smart-agriculture-f7dc47469a68)**
+
 # 🌍 GIS3R1 – Laravel GIS dengan Leaflet
 
 ## 🚀 Pendahuluan
