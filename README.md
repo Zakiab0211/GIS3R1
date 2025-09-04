@@ -257,3 +257,47 @@ Sebelum mulai pastikan:
     sudo apt install certbot python3-certbot-nginx -y
     sudo certbot --nginx -d yourdomain.com -d www.yourdomain.com
     ```
+
+13. **⚙️ Setting Database di Docker**
+## ⚙️ Setting Database di Docker
+**Jika terjadi error koneksi database (SQLSTATE[HY000] [1044] Access denied), biasanya karena konfigurasi user & database tidak sinkron antara file .env dan docker-compose.yml.**
+
+1. **Pastikan konfigurasi .env sudah benar**
+    ```env
+    DB_CONNECTION=mysql
+    DB_HOST=gis-mysql
+    DB_PORT=3306
+    DB_DATABASE=giseri
+    DB_USERNAME=rootnow
+    DB_PASSWORD=rootnow
+    ```
+    
+2. **Cek & beri hak akses user di MySQL container**
+    ```bash
+    docker exec -it gis-mysql bash
+    mysql -u root -p
+    ```
+
+    **Lalu di MySQL:**
+
+    **SHOW GRANTS FOR 'rootnow'@'%';**
+    **GRANT ALL PRIVILEGES ON giseri.* TO 'rootnow'@'%';**
+    **FLUSH PRIVILEGES;**
+
+3. **Import file SQL (jika ada data awal)**
+    ```bash
+    docker cp /home/ubuntu/GIS3R1/giseri.sql gis-mysql:/giseri.sql
+    docker exec -it gis-mysql bash
+    mysql -u rootnow -p giseri < /giseri.sql
+    ```
+
+4. **Cek status MySQL container**
+    ```bash
+    docker-compose logs db
+    ```
+
+5. **Restart docker-compose setelah perubahan**
+    ```bash
+    sudo docker-compose down
+    sudo docker-compose up -d --build
+    ```
