@@ -9,10 +9,10 @@ class WeatherSTATController extends Controller
     public function Weather_Station()
     {
         // URL API Gateway
-        $apiUrl = "https://pzmw0ozlwf.execute-api.us-east-1.amazonaws.com/v1/WeatherStation";
+        #$apiUrl = "https://pzmw0ozlwf.execute-api.us-east-1.amazonaws.com/v1/WeatherStation";
 
         //URL API GATEWAY KE 2
-        #$apiUrl = "https://9s64d42ho3.execute-api.us-east-1.amazonaws.com/prod/weatherdata";
+        $apiUrl = "https://9s64d42ho3.execute-api.us-east-1.amazonaws.com/prod/weatherdata";
 
         try {
             // Fetch data dari API dengan timeout untuk menghindari request tergantung lama
